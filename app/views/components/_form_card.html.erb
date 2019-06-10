@@ -1,0 +1,18 @@
+<div class='w-100 card rounded-0'>
+    <div class='card-header'>
+        <%= headerString %>
+    </div>
+    <div class='card-body'>
+        <%= simple_form_for newModel do |f| %>
+            <%= f.input :content, label: false, as: :text, class: 'form-control rounded-0' %>
+            <% if context == :tweet %>
+                <%= f.button :submit, 'Tweet', class: 'btn-primary col-2 float-right rounded-0' %>
+            <% elsif context == :comment %>
+                <%= newModel.tweets_id %>
+                <%= f.input :tweets_id, :as => :hidden, :input_html => { :value => tweetId } %>
+                <%= f.button :submit, 'Comment', class: 'btn-primary col-2 float-right rounded-0 ml-3' %>
+                <%= link_to "Discard", :back, {:class=>'btn btn-primary col-2 float-right rounded-0'} %>
+            <% end %>
+        <% end %>
+    </div>
+</div>

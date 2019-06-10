@@ -10,6 +10,18 @@
   </head>
 
   <body>
-    <%= yield %>
+    <nav class="navbar navbar-dark bg-primary">
+        <div class='container tweets-index'>
+            <%= link_to 'Twitter', tweets_path, class: 'navbar-brand' %>
+            <a class='float-right text-light' href=#>
+                Thitiphoom Chit-armarth
+            </a>
+        </div>
+    </nav>
+    <div class='container tweets-index'>
+        <small class='row'>
+            <%= yield %>
+        </small>
+    </div>
   </body>
 </html>

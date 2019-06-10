@@ -1,0 +1,9 @@
+<div class='mt-3 w-100'>
+    <%= render "components/content_card", tweet: @tweet, context: :show, commentNumber: @comments.size %>
+</div>
+
+<% @comments.each do |comment| %>
+    <%= render "components/comment_card", comment: comment, context: :show %>
+<% end %>
+
+<%= render "components/form_card", newModel: @newComment, context: :comment, headerString: 'Comment Something', tweetId: @tweet.id %>

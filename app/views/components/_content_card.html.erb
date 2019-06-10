@@ -1,0 +1,37 @@
+<div class='w-100 card rounded-0'>
+    <div class='card-header border-light'>
+        <!-- profile picture -->
+        Thitphoom Chit-armarth
+        <div class='float-right'>
+            <small class='text-muted'><%= tweet.created_at.strftime( '%d %b %Y %T' ) %></small>
+            <small>
+                <% if context == :edit %>
+                    Edit
+                <% else %>
+                    <%= link_to 'Edit', edit_tweet_path(tweet.id) %>
+                <% end %>
+                <%= link_to 'Delete', tweet_path(tweet.id), method: :delete %>
+            </small>
+        </div>
+    </div>
+    <div class='card-body'>
+        <% if context == :edit %>
+            <%= simple_form_for tweet do |f| %>
+                <%= f.input :content, label: false, as: :text %>
+                <%= f.button :submit, 'Done', class: 'btn-primary col-2 float-right ml-3 rounded-0' %>
+                <%= link_to "Discard", :back, {:class=>'btn btn-primary col-2 float-right rounded-0'} %>
+            <% end %>
+        <% else %>
+            <span class='card-text font-weight-light'> <%= simple_format( tweet.content ) %> </span>
+            <div class='text-center font-weight-light'>
+                <a class='col'>0 Like</a>
+                <a class='col'>0 Retweet</a>
+                <% if context == :show %>
+                    <a class='col'><%= commentNumber %> Comment</a>
+                <% else %>
+                <%= link_to "#{commentNumber} Comment", tweet_path(tweet.id), class: 'col' %>
+                <% end %>
+            </div>
+        <% end %>
+    </div>
+</div>
