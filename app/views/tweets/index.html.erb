@@ -3,7 +3,7 @@
 </div>
 <% @tweets.each do |tweetHash| %>
     <div class='mt-3 w-100'>
-        <%= render "components/content_card", tweet: tweetHash[:tweet], context: :index, replyNumber: tweetHash[:count] %>
+        <%= render "components/content_card", tweet: tweetHash[:tweet], context: :index, replyNumber: tweetHash[:count], retweet: tweetHash[:retweet] %>
     </div>
     <%= render "components/replies", replies: tweetHash[:replies], context: :index %>
 <% end %>
