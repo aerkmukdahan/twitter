@@ -1,11 +1,16 @@
-<% replies.each do |replyHash| %>
-    <% reply = replyHash[:tweet] %>
+<% if context == :parent %>
+    <% unless tweet.reply_to_tweet_id.nil? %>
+        <%= render "components/replies", tweet: tweet.reply_to_tweet, context: :parent %>
+    <% end %>
+    <% array = tweet.reply_to_tweet.nil? ? [] : [tweet.reply_to_tweet] %>
+<% else %>
+    <% array = tweet.replies %>
+<% end %>
+<% array.each do |reply| %>
     <% if context == :parent %> <div class='w-100 card border-bottom-0 rounded-0'>
     <% elsif context == :nest %> <div class='w-100 card border-top-0 border-bottom-0 border-right-0 rounded-0'>
-    <% elsif replyHash == replies.last %> <div class='w-100 card border-top-0 rounded-0'>
+    <% elsif reply == array.last %> <div class='w-100 card border-top-0 rounded-0'>
     <% elsif context == :show or context == :index %> <div class='w-100 card border-top-0 border-bottom-0 rounded-0'>
-    
-    
     <% else %> <div class='w-100 card rounded-0'> <% end %>
         <div class='container mt-3'>
             <span class='row'>
@@ -26,31 +31,20 @@
                     </div>
                 </div>
                 <div class='font-weight-light col-12 mb-3'>
-                    <%# <% if context == :edit %>
-                    <%#     <%= simple_form_for reply do |f| %>
-                    <%#         <%= f.input :content, label: false, as: :text %>
-                    <%#         <%= f.button :submit, 'Done', class: 'btn-primary col-2 float-right ml-3 rounded-0' %>
-                    <%#         <%= link_to "Discard", :back, {:class=>'btn btn-primary col-2 float-right rounded-0'} %>
-                    <%#     <% end %>
-                    <%# <% else %>
-                        <div>
-                            <%= reply.content %>
-                        </div>
-                        <div class='text-right'>
-                            <a class='col'>0 Like</a>
-                            <a class='col'>0 Retweet</a>
-                            <%= link_to "#{replyHash[:count]} Reply", tweet_path(reply.id), class: 'col' %>
-                        </div>
-                    <%# <% end %>
+                    <div>
+                        <%= reply.content %>
+                    </div>
+                    <div class='text-right'>
+                        <a class='col'>0 Like</a>
+                        <%= link_to "#{reply.retweets.size} Retweet", retweet_path(reply.id), class: 'col' %>
+                        <%= link_to "#{reply.replies.size} Reply", tweet_path(reply.id), class: 'col' %>
+                    </div>
                 </div> 
             </span>
-            <% unless context == :index %>
-                <% repliesNest = replyHash[:replies] %>
-                <% unless repliesNest.size == 0 %>
-                    <div class='row reply float-right'>
-                        <%= render "components/replies", replies: repliesNest, context: :nest %>
-                    </div>
-                <% end %>
+            <% unless context == :index or context == :parent %>
+                <div class='row reply float-right'>
+                    <%= render "components/replies", tweet: reply, context: :nest %>
+                </div>
             <% end %>
         </div>
     </div>

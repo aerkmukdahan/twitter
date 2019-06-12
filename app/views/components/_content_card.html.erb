@@ -4,14 +4,16 @@
         Thitphoom Chit-armarth
         <div class='float-right'>
             <small class='text-muted'><%= tweet.created_at.strftime( '%d %b %Y %T' ) %></small>
-            <small>
-                <% if context == :edit %>
-                    Edit
-                <% else %>
-                    <%= link_to 'Edit', edit_tweet_path(tweet.id) %>
-                <% end %>
-                <%= link_to 'Delete', tweet_path(tweet.id), method: :delete %>
-            </small>
+            <% unless context == :retweet %>
+                <small>
+                    <% if context == :edit %>
+                        Edit
+                    <% else %>
+                        <%= link_to 'Edit', edit_tweet_path(tweet.id) %>
+                    <% end %>
+                    <%= link_to 'Delete', tweet_path(tweet.id), method: :delete %>
+                </small>
+            <% end %>
         </div>
     </div>
     <div class='card-body'>
@@ -24,14 +26,27 @@
         <% else %>
             <span class='card-text font-weight-light'> <%= simple_format( tweet.content ) %> </span>
             <% unless context == :retweet %>
+                <% retweet = tweet.retweet_from_tweet %>
+                <% if retweet != nil %>
+                    <%= link_to ( tweet_path( retweet.id ) ) do %>
+                        <%= render "components/content_card", tweet: retweet, context: :retweet %>
+                    <% end %>
+                <% elsif tweet.retweet_from_tweet_id.present? %>
+                    <div class='w-100 card rounded-0'>
+                        <div class='card-header border-light'>
+                        </div>
+                        <div class='card-body text-center'>
+                            <span class='card-text'> This tweet has been removed </span>
+                        </div>
+                    </div>
+                <% end %>
                 <div class='text-center font-weight-light'>
                     <a class='col'>0 Like</a>
-                    <%#<a class='col'>0 Retweet</a>%>
-                    <%= link_to "0 Retweet", retweet_path(tweet.id), class: 'col' %>
+                    <%= link_to "#{tweet.retweets.size} Retweet", retweet_path(tweet.id), class: 'col' %>
                     <% if context == :show %>
-                        <a class='col'><%= replyNumber %> Reply</a>
+                        <a class='col'><%= tweet.replies.size %> Reply</a>
                     <% else %>
-                    <%= link_to "#{replyNumber} Reply", tweet_path(tweet.id), class: 'col' %>
+                    <%= link_to "#{tweet.replies.size} Reply", tweet_path(tweet.id), class: 'col' %>
                     <% end %>
                 </div>
             <% end %>

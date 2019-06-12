@@ -8,12 +8,11 @@
             <% if context == :tweet %>
                 <%= f.button :submit, 'Tweet', class: 'btn-primary col-2 float-right rounded-0' %>
             <% elsif context == :reply %>
-                <% hidden_field_tag( :parent_tweet_id, params[:id] ) %>
+                <%= hidden_field_tag( :reply_to_tweet_id, params[:id] ) %>
                 <%= f.button :submit, 'Reply', class: 'btn-primary col-2 float-right rounded-0 ml-3' %>
-                <%= link_to "Discard", :back, {:class=>'btn btn-primary col-2 float-right rounded-0'} %>
             <% elsif context == :retweet %>
-                <%= render "components/content_card", tweet: parentTweet, context: :retweet %>
-                <% hidden_field_tag( :parent_retweet_id, params[:id] ) %>
+                <%= render "components/content_card", tweet: retweetedTweet, context: :retweet %>
+                <%= hidden_field_tag( :retweet_from_tweet_id, params[:id] ) %>
                 <%= f.button :submit, 'Retweet', class: 'btn-primary col-2 float-right rounded-0 ml-3 mt-3' %>
                 <%= link_to "Discard", :back, {:class=>'btn btn-primary col-2 float-right rounded-0 mt-3'} %>
             <% end %>

@@ -1,0 +1,11 @@
+<% flash.each do |context, messageArray| %>
+    <% messageArray.each do |message| %>
+        <% if context == 'success' %>
+            <div class='alert alert-success w-100 rounded-0 text-center'><%= message %></div>
+        <% elsif context == 'fail' %>
+            <div class='alert alert-danger w-100 rounded-0 text-center'><%= message %></div>
+        <% elsif context == 'warning' %>
+            <div class='alert alert-warning w-100 rounded-0 text-center'><%= message %></div>
+        <% end %>
+    <% end %>
+<% end %>

@@ -1,9 +1,11 @@
-<div class='mt-3 w-100'>
-    <%= render "components/form_card", newModel: @newTweet, context: :tweet, headerString: 'Tweet Someting' %>
+<div class='mt-3 mb-3 w-100'>
+    <%= render "components/form_card", context: :tweet, newModel: @newTweet, headerString: 'Tweet Someting' %>
 </div>
-<% @tweets.each do |tweetHash| %>
-    <div class='mt-3 w-100'>
-        <%= render "components/content_card", tweet: tweetHash[:tweet], context: :index, replyNumber: tweetHash[:count] %>
+<%= render "components/flash_dialog" %>
+<% @tweets.each do |tweet| %>
+    <div class='mb-3 w-100'>
+        <%= render "components/content_card", context: :index, tweet: tweet %>
+        <%= render "components/replies", context: :index, tweet: tweet %>
     </div>
-    <%= render "components/replies", replies: tweetHash[:replies], context: :index %>
 <% end %>
+

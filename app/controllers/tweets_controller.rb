@@ -1,43 +1,35 @@
 class TweetsController < ApplicationController
 
     def index
-        # @tweets = Tweet.where(parent_tweet_id: nil).sort_by{ |tweet| tweet.updated_at }.reverse
-        @tweets = getAllReplyAndRetweet( nil, Tweet.all ).reverse
-        # comments = Comment.all
-        # @commentsHash = Hash.new( Array.new )
-        # comments.each do |comment|
-        #     if @commentsHash[comment.tweets_id].size == 0
-        #         @commentsHash[comment.tweets_id] = Array.new
-        #     end
-        #     @commentsHash[comment.tweets_id] << comment
-        # end
+        @tweets = Tweet.where( reply_to_tweet_id: nil ).sort_by{ |tweet| tweet.updated_at }.reverse
         @newTweet = Tweet.new
     end
 
     def create
-        @tweet = Tweet.create( tweets_params )
-        if @tweet.parent_tweet_id == nil
-            redirect_to tweets_path
+        tweet = Tweet.create( tweets_params )
+        if tweet.valid?
+            flash[:success] = ['Tweet successful.']
         else
-            redirect_to tweet_path( @tweet.parent_tweet_id )
+            flash[:fail] = Array.new
+            tweet.errors.messages.each{ |column, messageArray|  messageArray.each{ |message| flash[:fail] << message } }
+        end
+        redirect_to tweet.reply_to_tweet_id.nil? ? tweets_path : tweet_path( tweet.reply_to_tweet_id )
+    end
+
+    def update
+        tweet = Tweet.find(params[:id])
+        if tweet.update(content: params[:tweet][:content])
+            flash[:success] = ['Edit successful.']
+            redirect_to tweet_path( params[:id] )
+        else
+            flash[:fail] = Array.new
+            tweet.errors.messages.each{ |column, messageArray|  messageArray.each{ |message| flash[:fail] << message } }
+            redirect_to edit_tweet_path( params[:id] )
         end
     end
 
-    # def update
-    #     @tweet = Tweet.find(params[:id])
-    #     if @tweet.update(content: params[:tweet][:content])
-    #         redirect_to tweets_path
-    #     else
-    #         redirect_to edit_tweet_path(@tweet.id)
-    #     end
-    # end
-
     def show
-        tweets = Tweet.all
         @tweet = Tweet.find(params[:id])
-        @replies = getAllReplyAndRetweet( @tweet.id, tweets )
-        @repliesNumber = @replies.sum{ |replyHash| replyHash[:count] } + @replies.size
-        @parentTweets = getAllParent( @tweet, tweets )
         @newReply = Tweet.new
     end
 
@@ -46,55 +38,21 @@ class TweetsController < ApplicationController
         @tweet = Tweet.find(params[:id])
     end
 
-    # # def new
-    # #     @tweet = Tweet.new
-    # # end
-
     def edit
-        tweets = Tweet.all
         @tweet = Tweet.find(params[:id])
-        @replies = getAllReplyAndRetweet( @tweet.id, tweets )
-        @repliesNumber = @replies.sum{ |replyHash| replyHash[:count] } + @replies.size
-        @parentTweets = getAllParent( @tweet, tweets )
     end
 
     def destroy
-        @tweet = Tweet.find(params[:id])
-        parentTweetId = @tweet.parent_tweet_id
-        @tweet.destroy
+        tweet = Tweet.find(params[:id])
+        parentTweetId = tweet.retweet_from_tweet_id
+        tweet.destroy
         redirect_to request.referer == url_for ? ( parentTweetId.nil? ? tweets_path : tweet_path( parentTweetId ) ) : request.referer
     end
 
     private
 
     def tweets_params
-        params.require(:tweet).permit(:content).merge!(parent_tweet_id: params[:parent_tweet_id]).merge!(retweet_id: params[:parent_retweet_id])
-    end
-
-    def getAllReplyAndRetweet( parentId, tweets )
-        output = Array.new
-        tweets.select{|tweet| tweet.parent_tweet_id == parentId or tweet.parent_tweet_id.to_i == parentId}.each do |tweet|
-            tmpHash = Hash.new
-            tmpHash[:tweet] = tweet
-            tmpHash[:retweet] = tweets.select{|tmpTweet| tmpTweet.id == tweet.retweet_id}
-            tmpHash[:replies] = getAllReplyAndRetweet( tweet.id, tweets )
-            tmpHash[:count] = tmpHash[:replies].sum{ |replyHash| replyHash[:count] } + tmpHash[:replies].size
-            output << tmpHash
-        end
-        output.sort_by{ |tweetHash| tweetHash[:tweet].created_at }
-    end
-
-    def getAllParent( tweet, tweets )
-        output = Array.new
-        tmpHash = Hash.new
-        tmpHash[:tweet] = tweet.parent_tweet
-        if tmpHash[:tweet].nil?
-            return output
-        end
-        tmpHash[:replies] = Array.new
-        output = getAllParent( tmpHash[:tweet], tweets )
-        tmpHash[:count] = output.size + 1
-        output += [tmpHash]
+        params.require(:tweet).permit(:content).merge(reply_to_tweet_id: params[:reply_to_tweet_id], retweet_from_tweet_id: params[:retweet_from_tweet_id])
     end
 
 end
