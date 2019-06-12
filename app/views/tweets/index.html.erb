@@ -1,15 +1,9 @@
 <div class='mt-3 w-100'>
     <%= render "components/form_card", newModel: @newTweet, context: :tweet, headerString: 'Tweet Someting' %>
 </div>
-<% @tweets.sort_by{ |tweet| tweet.updated_at }.reverse.each do |tweet| %>
+<% @tweets.each do |tweetHash| %>
     <div class='mt-3 w-100'>
-        <%= render "components/content_card", tweet: tweet, context: :index, commentNumber: @commentsHash[tweet.id].size %>
+        <%= render "components/content_card", tweet: tweetHash[:tweet], context: :index, replyNumber: tweetHash[:count] %>
     </div>
-    <% @commentsHash[tweet.id].each do |comment| %>
-        <% if comment.id == @commentsHash[tweet.id][-1].id %>
-            <%= render "components/comment_card", comment: comment, context: :last %>
-        <% else %>
-            <%= render "components/comment_card", comment: comment, context: :show %>
-        <% end %>
-    <% end %>
+    <%= render "components/replies", replies: tweetHash[:replies], context: :index %>
 <% end %>

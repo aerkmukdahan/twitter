@@ -7,11 +7,15 @@
             <%= f.input :content, label: false, as: :text, class: 'form-control rounded-0' %>
             <% if context == :tweet %>
                 <%= f.button :submit, 'Tweet', class: 'btn-primary col-2 float-right rounded-0' %>
-            <% elsif context == :comment %>
-                <%= newModel.tweets_id %>
-                <%= f.input :tweets_id, :as => :hidden, :input_html => { :value => tweetId } %>
-                <%= f.button :submit, 'Comment', class: 'btn-primary col-2 float-right rounded-0 ml-3' %>
+            <% elsif context == :reply %>
+                <% hidden_field_tag( :parent_tweet_id, params[:id] ) %>
+                <%= f.button :submit, 'Reply', class: 'btn-primary col-2 float-right rounded-0 ml-3' %>
                 <%= link_to "Discard", :back, {:class=>'btn btn-primary col-2 float-right rounded-0'} %>
+            <% elsif context == :retweet %>
+                <%= render "components/content_card", tweet: parentTweet, context: :retweet %>
+                <% hidden_field_tag( :parent_retweet_id, params[:id] ) %>
+                <%= f.button :submit, 'Retweet', class: 'btn-primary col-2 float-right rounded-0 ml-3 mt-3' %>
+                <%= link_to "Discard", :back, {:class=>'btn btn-primary col-2 float-right rounded-0 mt-3'} %>
             <% end %>
         <% end %>
     </div>
