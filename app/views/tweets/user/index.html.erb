@@ -1,0 +1,32 @@
+<% homepage_header_class = @dark_theme ? 'text-light' : '' %>
+<div class='<%= homepage_header_class %> text-center homepage-header'>
+  <h1 class='font-weight-light' > @<%= @user.name %> </h1>
+  <% if user_signed_in? and current_user.id == @user.id %>
+    <%= link_to 'edit', edit_user_registration_path %><br>
+  <% else %>
+    <% if user_signed_in? and ( current_user.followings.include? @user ) %>
+      <%= link_to 'unfollow', unfollow_path( @user.id ), method: :delete %><br>
+    <% else %>
+      <%= link_to 'follow', follow_path( @user.id ), method: :post %><br>
+    <% end %>
+  <% end %>
+  <div class='row'>
+    <div class='col'>
+      Tweets<br><%= @tweets.size %>
+    </div>
+    <div class='col'>
+      Following<br><%= @user.followings.size %>
+    </div>
+    <div class='col'>
+      Follower<br><%= @user.followers.size %>
+    </div>
+  </div>
+</div>
+<%= render "components/flash_dialog" %>
+<% @tweets.each do |tweet| %>
+  <div class='mb-3'>
+    <%= render "components/content_card", context: :index, tweet: tweet %>
+    <%= render "components/replies", context: :index, tweet: tweet %>
+  </div>
+<% end %>
+

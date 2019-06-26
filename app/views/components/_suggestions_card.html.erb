@@ -1,0 +1,17 @@
+<% card_class = @dark_theme ? 'bg-dark text-light' : '' %>
+<div class='container w-100'>
+  <div class='row'>
+    <div class="<%= card_class %> w-100 card rounded-0">
+      <div class='card-body container'>
+        <div>
+        <h5> User Suggestion </h5>
+        <% @user_suggestions.each do | user | %>
+          <br><a href="<%= tweets_user_path(user.id) %>">
+            @<%= user.name %> <br>
+          </a>
+        <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

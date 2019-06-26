@@ -1,27 +1,11 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Twitter</title>
-    <%= csrf_meta_tags %>
-    <%= csp_meta_tag %>
-
-    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
-    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <%= render "layouts/shared/header" %>
   </head>
-
-  <body>
-    <nav class="navbar navbar-dark bg-primary">
-        <div class='container tweets-index'>
-            <%= link_to 'Twitter', tweets_path, class: 'navbar-brand' %>
-            <a class='float-right text-light' href=#>
-                Thitiphoom Chit-armarth
-            </a>
-        </div>
-    </nav>
-    <div class='container tweets-index'>
-        <small class='row'>
-            <%= yield %>
-        </small>
-    </div>
+  <% body_class = @dark_theme ? 'bg-secondary' : 'bg-light' %>
+  <body class="<%= body_class %>">
+    <%= render "components/navbar" %>
+    <%= yield %>
   </body>
 </html>

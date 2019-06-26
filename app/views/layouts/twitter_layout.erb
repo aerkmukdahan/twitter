@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <%= render "layouts/shared/header" %>
+  </head>
+  <% body_class = @dark_theme ? 'bg-secondary' : 'bg-light' %>
+  <body class="<%= body_class %>">
+    <%= render "components/navbar" %>
+    <div class='container mt-3'>
+      <div class='row'>
+        <div class='col-3'>
+          <%= render "components/trends_card" %>
+        </div>
+        <div class='col-6'>
+          <%= yield %>
+        </div>
+        <div class='col-3'>
+          <%= render "components/suggestions_card" %>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

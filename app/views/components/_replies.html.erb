@@ -1,51 +1,78 @@
+<% card_class = @dark_theme ? 'bg-dark text-light border-secondary' : '' %>
+<% card_header_class = @dark_theme ? 'bg-dark text-light border-secondary' : 'border-light text-muted' %>
+<% explain_parent_class = @dark_theme ? 'bg-dark' : 'bg-white border' %>
+<% date_string_class = @dark_theme ? '' : 'text-muted' %>
 <% if context == :parent %>
-    <% unless tweet.reply_to_tweet_id.nil? %>
-        <%= render "components/replies", tweet: tweet.reply_to_tweet, context: :parent %>
-    <% end %>
-    <% array = tweet.reply_to_tweet.nil? ? [] : [tweet.reply_to_tweet] %>
+  <% unless tweet.reply_to_tweet_id.nil? %>
+    <%= render "components/replies", tweet: tweet.reply_to_tweet, context: :parent %>
+  <% end %>
+  <% array = tweet.reply_to_tweet.nil? ? [] : [tweet.reply_to_tweet] %>
 <% else %>
-    <% array = tweet.replies %>
+  <% array = tweet.replies %>
 <% end %>
 <% array.each do |reply| %>
-    <% if context == :parent %> <div class='w-100 card border-bottom-0 rounded-0'>
-    <% elsif context == :nest %> <div class='w-100 card border-top-0 border-bottom-0 border-right-0 rounded-0'>
-    <% elsif reply == array.last %> <div class='w-100 card border-top-0 rounded-0'>
-    <% elsif context == :show or context == :index %> <div class='w-100 card border-top-0 border-bottom-0 rounded-0'>
-    <% else %> <div class='w-100 card rounded-0'> <% end %>
-        <div class='container mt-3'>
-            <span class='row'>
-                <div class='col-12'>
-                    Thitphoom Chit-armarth
-                    <div class='float-right'>
-                        <small class='text-muted'><%= reply.created_at.strftime( '%d %b %Y %T' ) %></small>
-                        <% unless context == :parent %>
-                            <small>
-                            <% if context == :edit %>
-                                Edit
-                            <% else %>
-                                <%= link_to 'Edit', edit_tweet_path(reply.id)  %>
-                            <% end %>
-                            <%= link_to 'Delete', tweet_path(reply.id), method: :delete %>
-                            </small>
-                        <% end %>
-                    </div>
-                </div>
-                <div class='font-weight-light col-12 mb-3'>
-                    <div>
-                        <%= reply.content %>
-                    </div>
-                    <div class='text-right'>
-                        <a class='col'>0 Like</a>
-                        <%= link_to "#{reply.retweets.size} Retweet", retweet_path(reply.id), class: 'col' %>
-                        <%= link_to "#{reply.replies.size} Reply", tweet_path(reply.id), class: 'col' %>
-                    </div>
-                </div> 
-            </span>
-            <% unless context == :index or context == :parent %>
-                <div class='row reply float-right'>
-                    <%= render "components/replies", tweet: reply, context: :nest %>
-                </div>
+  <% if context == :parent %> 
+    <div class='<%= card_class %> w-100 card border-bottom-0 rounded-0'>
+  <% elsif context == :nest %> 
+    <div class='<%= card_class %> w-100 card border-top-0 border-bottom-0 border-right-0 rounded-0'>
+  <% elsif reply == array.last %> 
+    <div class='<%= card_class %> w-100 card border-top-0 rounded-0'>
+  <% elsif context == :show or context == :index %> 
+    <div class='<%= card_class %> w-100 card border-top-0 border-bottom-0 rounded-0'>
+  <% else %> 
+    <div class='<%= card_class %> w-100 card rounded-0'> 
+  <% end %>
+    <% if context == :parent %> 
+      <div class='<%= card_header_class %> container pt-3 card-header'>
+    <% else %> 
+      <div class='container mt-3'> 
+    <% end %>
+      <span class='row'>
+        <div class='col-12'>
+          <%= link_to "@#{reply.user.name}" , tweets_user_path( reply.user.id ) %>
+          <div class='float-right'>
+            <small class=<%= date_string_class %>><%= reply.created_at.strftime( '%d %b %Y %T' ) %></small>
+            <% if context != :parent and user_signed_in? and current_user.id == reply.user.id %>
+              <small>
+                <% if context == :edit %>
+                  Edit
+                <% else %>
+                  <%= link_to 'Edit', edit_tweet_path(reply.id)  %>
+                <% end %>
+                <%= link_to 'Delete', tweet_path(reply.id), method: :delete %>
+              </small>
             <% end %>
+          </div>
         </div>
+        <div class='font-weight-light col-12 mb-3'>
+          <div>
+            <%= simple_format( reply.content.split(' ').map{|word| %>
+            <% (word.start_with? '#') ? %>
+            <% "<a href=#{tweets_hash_tag_path(word)}>#{word}</a>" : word }.join(' ') ) %>
+          </div>
+          <div class='text-right'>
+            <% if user_signed_in? and current_user.liked_tweets.include? reply %>
+              <%= link_to "#{reply.likes.size} Unlike", unlike_tweet_path(reply.id), class: 'col', method: :delete %>
+            <% else %>
+              <%= link_to "#{reply.likes.size} Like", like_tweet_path(reply.id), class: 'col', method: :post %>
+            <% end %>
+            <%= link_to "#{reply.retweets.size} Retweet", retweet_path(reply.id), class: 'col' %>
+            <%= link_to "#{reply.replies.size} Reply", tweet_path(reply.id), class: 'col' %>
+          </div>
+        </div>
+      </span>
+      <% unless context == :index or context == :parent %>
+        <div class='row reply float-right w-100'>
+          <%= render "components/replies", tweet: reply, context: :nest %>
+        </div>
+      <% end %>
     </div>
+    <% if context == :parent %> 
+      <div class='<%= explain_parent_class %> justify-content-center row'>
+        <div class='p-1 text-center'>
+          <%= link_to ". . .", tweet_path(reply.id), class: 'col' %>
+        </div>
+      </div>
+    <% end %>
+  </div>
 <% end %>

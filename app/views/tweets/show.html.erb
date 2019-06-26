@@ -1,9 +1,14 @@
-<div class='mt-3 w-100'>
-    <%= render "components/flash_dialog" %>
-    <%= render "components/replies", context: :parent, tweet: @tweet %>
-    <%= render "components/content_card", context: :show, tweet: @tweet %>
-    <%= render "components/replies", context: :show, tweet: @tweet %>
+<div class='w-100'>
+  <%= render "components/flash_dialog" %>
+  <%= render "components/replies", context: :parent, tweet: @tweet %>
+  <%= render "components/content_card", context: :show, tweet: @tweet %>
+  <%= render "components/replies", context: :show, tweet: @tweet %>
 </div>
-<div class='mt-3 mb-3 w-100'>
-    <%= render "components/form_card", context: :reply, newModel: @newReply, headerString: 'Reply Something' %>
-</div>
+<% if user_signed_in? %>
+  <div class='mt-3 mb-3 w-100'>
+    <%= render "components/form_card", 
+        context: :reply, 
+        new_model: @new_reply, 
+        header_string: 'Reply Something' %>
+  </div>
+<% end %>

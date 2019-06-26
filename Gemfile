@@ -40,6 +40,7 @@ gem 'simple_form'
 gem 'bootstrap'
 gem 'jquery-rails'
 gem 'pry-byebug'
+gem 'devise'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

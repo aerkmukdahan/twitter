@@ -20,14 +20,9 @@ html {
     font-size: smaller;
 }
 
-body{
-    background: #fbfbfb;
-}
-
-.tweets-index {
-    width: 35%;
-}
-
-.reply  {
-    width: 102%;
+.homepage-header {
+  height: 14rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
