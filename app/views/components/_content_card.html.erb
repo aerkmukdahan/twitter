@@ -1,8 +1,5 @@
-<% card_class = @dark_theme ? 'bg-dark text-light border-secondary' : '' %>
-<% card_header_class = @dark_theme ? 'bg-dark text-light border-secondary' : 'border-light text-muted' %>
-<% button_class = @dark_theme ? 'btn-secondary' : 'btn-primary' %>
-<div class='<%= card_class %> w-100 card rounded-0'>
-  <div class='<%= card_header_class %> card-header'>
+<div class='<%= [bg_class, text_class, border_class].join(' ') %> w-100 card rounded-0'>
+  <div class='<%= [bg_class, text_gray_class, border_bg_class].join(' ') %> card-header'>
     <!-- profile picture -->
     <% unless context == :retweet %>
       <%= link_to "@#{tweet.user.name}" , tweets_user_path( tweet.user.id ) %>
@@ -25,17 +22,14 @@
   </div>
   <div class='card-body'>
     <% if context == :edit %>
-      <%# tweet.content.gsub!(/(<a href=#>)|(<a href="[a-zA-Z\/]*">)|(<\/a>)/,'') %>
       <%= simple_form_for tweet do |f| %>
         <%= f.input :content, label: false, as: :text %>
-        <%= f.button :submit, 'Done', class: "#{button_class} col-2 float-right ml-3 rounded-0" %>
+        <%= f.button :submit, 'Done', class: "#{btn_class} col-2 float-right ml-3 rounded-0" %>
         <%= link_to "Discard", :back, {:class=>'col-2 float-right rounded-0 mt-2'} %>
       <% end %>
     <% else %>
       <span class='card-text font-weight-light'>
-        <%= simple_format( tweet.content.split(' ').map{|word| %>
-        <% (word.start_with? '#') ? %>
-        <% "<a href=#{tweets_hash_tag_path(word)}>#{word}</a>" : word }.join(' ') ) %>
+        <%= simple_format( add_hash_tag_link(tweet.content) ) %>
       </span>
       <% unless context == :retweet %>
         <% retweet = tweet.retweet_from_tweet %>

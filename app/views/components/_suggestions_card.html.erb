@@ -1,14 +1,18 @@
-<% card_class = @dark_theme ? 'bg-dark text-light' : '' %>
 <div class='container w-100'>
   <div class='row'>
-    <div class="<%= card_class %> w-100 card rounded-0">
+    <div class="<%= [bg_class, text_class, border_class].join(' ') %> w-100 card rounded-0">
       <div class='card-body container'>
         <div>
         <h5> User Suggestion </h5>
-        <% @user_suggestions.each do | user | %>
+        <% @user_suggestions[0...10].each do | user | %>
           <br><a href="<%= tweets_user_path(user.id) %>">
             @<%= user.name %> <br>
           </a>
+          <% if user_signed_in? and ( current_user.followings.include? user ) %>
+            <%= link_to 'unfollow', unfollow_path( user.id ), method: :delete %><br>
+          <% else %>
+            <%= link_to 'follow', follow_path( user.id ), method: :post %><br>
+          <% end %>
         <% end %>
         </div>
       </div>

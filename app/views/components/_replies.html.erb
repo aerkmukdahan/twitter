@@ -1,7 +1,3 @@
-<% card_class = @dark_theme ? 'bg-dark text-light border-secondary' : '' %>
-<% card_header_class = @dark_theme ? 'bg-dark text-light border-secondary' : 'border-light text-muted' %>
-<% explain_parent_class = @dark_theme ? 'bg-dark' : 'bg-white border' %>
-<% date_string_class = @dark_theme ? '' : 'text-muted' %>
 <% if context == :parent %>
   <% unless tweet.reply_to_tweet_id.nil? %>
     <%= render "components/replies", tweet: tweet.reply_to_tweet, context: :parent %>
@@ -12,18 +8,18 @@
 <% end %>
 <% array.each do |reply| %>
   <% if context == :parent %> 
-    <div class='<%= card_class %> w-100 card border-bottom-0 rounded-0'>
+    <div class='<%= [bg_class, text_class, border_class].join(' ') %> w-100 card border-bottom-0 rounded-0'>
   <% elsif context == :nest %> 
-    <div class='<%= card_class %> w-100 card border-top-0 border-bottom-0 border-right-0 rounded-0'>
+    <div class='<%= [bg_class, text_class, border_class].join(' ') %> w-100 card border-top-0 border-bottom-0 border-right-0 rounded-0'>
   <% elsif reply == array.last %> 
-    <div class='<%= card_class %> w-100 card border-top-0 rounded-0'>
+    <div class='<%= [bg_class, text_class, border_class].join(' ') %> w-100 card border-top-0 rounded-0'>
   <% elsif context == :show or context == :index %> 
-    <div class='<%= card_class %> w-100 card border-top-0 border-bottom-0 rounded-0'>
+    <div class='<%= [bg_class, text_class, border_class].join(' ') %> w-100 card border-top-0 border-bottom-0 rounded-0'>
   <% else %> 
-    <div class='<%= card_class %> w-100 card rounded-0'> 
+    <div class='<%= [bg_class, text_class, border_class].join(' ') %> w-100 card rounded-0'> 
   <% end %>
     <% if context == :parent %> 
-      <div class='<%= card_header_class %> container pt-3 card-header'>
+      <div class='<%= [bg_class, text_gray_class, border_bg_class].join(' ') %> container pt-3 card-header'>
     <% else %> 
       <div class='container mt-3'> 
     <% end %>
@@ -31,7 +27,7 @@
         <div class='col-12'>
           <%= link_to "@#{reply.user.name}" , tweets_user_path( reply.user.id ) %>
           <div class='float-right'>
-            <small class=<%= date_string_class %>><%= reply.created_at.strftime( '%d %b %Y %T' ) %></small>
+            <small class=<%= text_gray_class %>><%= reply.created_at.strftime( '%d %b %Y %T' ) %></small>
             <% if context != :parent and user_signed_in? and current_user.id == reply.user.id %>
               <small>
                 <% if context == :edit %>
@@ -68,7 +64,7 @@
       <% end %>
     </div>
     <% if context == :parent %> 
-      <div class='<%= explain_parent_class %> justify-content-center row'>
+      <div class='<%= [bg_parent_class, border_parent_class].join(' ') %> justify-content-center row'>
         <div class='p-1 text-center'>
           <%= link_to ". . .", tweet_path(reply.id), class: 'col' %>
         </div>

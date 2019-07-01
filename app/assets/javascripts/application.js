@@ -13,4 +13,51 @@
 //= require rails-ujs
 //= require activestorage
 //= require turbolinks
+//= require jquery
 //= require_tree .
+
+// $(document).ready(function() {
+//   $(".audioButton").on("load", function() {
+//     $(".audio-play")[0].currentTime = 0;
+//     return $(".audio-play")[0].play();
+//   });
+// })
+
+// $(document).ready(function() {
+//   $(".audioButton").on("load", function() {
+//     $(".audio-play")[0].currentTime = 0;
+//     return $(".audio-play")[0].play();
+//   });
+// })
+
+// $(document).ready(function() {
+//   $("body").load( function() {
+//     $(".audio-play")[0].currentTime = 0;
+//     return $(".audio-play")[0].play();
+//   });
+// })
+
+// document.addEventListener('DOMContentLoaded', function() {
+//   const button = document.querySelector('.audioButton');
+//   const media = document.querySelector('.audio-play');
+//   const flash = document.querySelector('.flash-sound');
+
+//   button.addEventListener('load', function() {
+//     media.currentTime = 0;
+//     media.play();
+//   })
+
+//   function play_sound(){
+//     media.currentTime = 0;
+//     media.play();
+//   }
+
+// })
+
+// function script(){
+//   const media = document.querySelector('.audio-play');
+//   function play_sound(){
+//     media.currentTime = 0;
+//     media.play();
+//   }
+// }

@@ -3,8 +3,7 @@
   <head>
     <%= render "layouts/shared/header" %>
   </head>
-  <% body_class = @dark_theme ? 'bg-secondary' : 'bg-light' %>
-  <body class="<%= body_class %>">
+  <body class="<%= bg_body_class %>">
     <%= render "components/navbar" %>
     <div class='container mt-3'>
       <div class='row'>

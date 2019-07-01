@@ -1,11 +1,11 @@
-<% card_class = @dark_theme ? 'w-100 card rounded-0 bg-dark text-light' : 'w-100 card rounded-0' %>
 <div class='container'>
   <div class='row'>
-    <div class="<%= card_class %>">
+    <div class="w-100 card rounded-0 <%= [bg_class, text_class ].join(' ') %>">
       <div class='card-body container'>
         <div>
         <h5> Trends Now... </h5>
         <% @top_ten_hash_tags.each do | hash_tag | %>
+          <% break if hash_tag.tweets.size == 0 %>
           <br><a href="<%= tweets_hash_tag_path(hash_tag.name) %>">
             <%= hash_tag.name %> <br>
           </a>

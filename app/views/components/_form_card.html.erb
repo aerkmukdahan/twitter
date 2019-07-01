@@ -1,23 +1,19 @@
-<% card_class = @dark_theme ? 'bg-dark text-light' : '' %>
-<% card_header_class = @dark_theme ? 'bg-dark border-secondary' : '' %>
-<% input_class = @dark_theme ? 'bg-secondary' : '' %>
-<% button_class = @dark_theme ? 'btn-secondary' : 'btn-primary' %>
-<div class="<%= card_class %> w-100 card rounded-0">
-  <div class="<%= card_header_class %> card-header">
+<div class="<%= [bg_class, text_class, border_class].join(' ') %> w-100 card rounded-0">
+  <div class="<%= [bg_class, border_class].join(' ') %> card-header">
     <%= header_string %>
   </div>
   <div class='card-body'>
     <%= simple_form_for new_model do |f| %>
-      <%= f.input :content, label: false, as: :text, class: "#{input_class} form-control rounded-0" %>
+      <%= f.input :content, label: false, as: :text, class: "#{bg_gray_class} form-control rounded-0" %>
       <% if context == :tweet %>
-        <%= f.button :submit, 'Tweet', class: "#{button_class} col-2 float-right rounded-0" %>
+        <%= f.button :submit, 'Tweet', class: "#{btn_class} col-2 float-right rounded-0" %>
       <% elsif context == :reply %>
         <%= hidden_field_tag( :reply_to_tweet_id, params[:id] ) %>
-        <%= f.button :submit, 'Reply', class: "#{button_class} col-2 float-right rounded-0 ml-3" %>
+        <%= f.button :submit, 'Reply', class: "#{btn_class} col-2 float-right rounded-0 ml-3" %>
       <% elsif context == :retweet %>
         <%= render "components/content_card", tweet: retweeted_tweet, context: :retweet %>
         <%= hidden_field_tag( :retweet_from_tweet_id, params[:id] ) %>
-        <%= f.button :submit, 'Retweet', class: "#{button_class} col-2 float-right rounded-0 ml-3 mt-3" %>
+        <%= f.button :submit, 'Retweet', class: "#{btn_class} col-2 float-right rounded-0 ml-3 mt-3" %>
         <%= link_to "Discard", :back, {:class=>'col-2 float-right mt-4'} %>
       <% end %>
     <% end %>

@@ -1,12 +1,12 @@
 <% flash.each do |context, message_array| %>
-  <% unless message_array.is_a? Array %>
-    <% message_array = [message_array] %>
-  <% end %>
-  <% message_array.each do |message| %>
+  <% Array(message_array).each do |message| %>
     <% if context == 'success' or context == 'notice' %>
       <div class='alert alert-success w-100 rounded-0 text-center'><%= message %></div>
     <% elsif context == 'fail' or context == 'alert' %>
       <div class='alert alert-danger w-100 rounded-0 text-center'><%= message %></div>
+    <% elsif context == 'sound' %>
+      <div class='alert alert-success w-100 rounded-0 text-center'><%= message %></div>
+      <script>document.querySelector('.audio-play').play();</script>
     <% else %>
       <%= context %>
       <div class='alert alert-warning w-100 rounded-0 text-center'><%= message %></div>

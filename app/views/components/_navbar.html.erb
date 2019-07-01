@@ -1,25 +1,24 @@
-<% nav_class = @dark_theme ? 'bg-dark' : 'bg-primary' %>
-<nav class="<%= nav_class %> navbar navbar-dark">
+<nav class="<%= bg_nav_bar_class %> navbar navbar-dark">
   <div class='container tweets-index'>
     <ul class='nav align-items-center'>
       <li class='nav-item'>
         <%= link_to 'Twitter', tweets_path, class: 'text-light nav-text navbar-brand' %>
       </li>
-      <% if user_signed_in? && current_user.dark_theme %>
-        <li class='nav-item'>
-          <%= link_to "Light", change_theme_path, class: 'text-light nav-text float-right', method: :patch %>
-        </li>
-      <% else %>
-        <li class='nav-item'>
-          <%= link_to "Dark", change_theme_path, class: 'text-light nav-text float-right', method: :patch %>
-        </li>
-      <% end %>
     </ul>
     <ul class='nav align-items-center justify-content-end'>
       <% if user_signed_in? %>
         <li class='nav-item ml-4'>
           <%= link_to "@#{current_user.name}", tweets_user_path(current_user.id), class: 'text-light nav-text float-right' %>
         </li>
+        <% if user_signed_in? && current_user.dark_theme %>
+          <li class='nav-item ml-4'>
+            <%= link_to "Light", change_theme_path, class: 'text-light nav-text float-right', method: :patch %>
+          </li>
+        <% else %>
+          <li class='nav-item ml-4'>
+            <%= link_to "Dark", change_theme_path, class: 'text-light nav-text float-right', method: :patch %>
+          </li>
+        <% end %>
         <li class='nav-item ml-4'>
           <%= link_to 'Logout', destroy_user_session_path, class: 'text-light nav-text float-right', method: :delete %>
         </li>

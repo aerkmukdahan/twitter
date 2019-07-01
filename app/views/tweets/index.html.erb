@@ -6,6 +6,7 @@
         header_string: 'Tweet Someting' %>
   </div>
 <% end %>
+<%= render "components/page_menu", items: @tweets %>
 <%= render "components/flash_dialog" %>
 <% @tweets.each do |tweet| %>
   <div class='mb-3'>
@@ -13,3 +14,4 @@
     <%= render "components/replies", context: :index, tweet: tweet %>
   </div>
 <% end %>
+<%= render "components/page_menu", items: @tweets %>

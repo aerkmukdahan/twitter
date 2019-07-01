@@ -1,0 +1,64 @@
+<nav>
+  <ul class="pagination justify-content-center">
+    <% unless items.current_page == 1 %>
+      <li class="page-item">
+        <a class="page-link rounded-0 <%= [bg_class, text_class, border_class].join(' ') %>" href="<%= path_to_prev_page @tweets %>">
+          <span>&laquo;</span>
+        </a>
+      </li>
+    <% else %>
+      <li class="page-item disabled">
+        <span class="page-link rounded-0 <%= [bg_class, text_class, border_class].join(' ') %>">
+          <span>&laquo;</span>
+        </span>
+      </li>
+    <% end %>
+
+    <% unless start_page( items ) == 1 %>
+      <li class="page-item disabled">
+        <span class="page-link rounded-0 <%= [bg_class, text_class, border_class].join(' ') %>">..</span>
+      </li>
+    <% end %>
+
+    <% (start_page( items )..end_page( items )).each do |page| %>
+      <% if page == items.current_page %>
+        <li class="page-item active">
+          <span class="page-link rounded-0 <%= [bg_gray_class, text_class, border_class].join(' ') %>"><%= page %></span>
+        </li>
+      <% elsif page == 1 %>
+        <li class="page-item">
+          <a class="page-link rounded-0 <%= [bg_class, text_class, border_class].join(' ') %>" href="<%=tweets_path%>">
+            <%= page %>
+          </a>
+        </li>
+      <% else %>
+        <li class="page-item">
+          <a class="page-link rounded-0 <%= [bg_class, text_class, border_class].join(' ') %>" href="<%=tweets_path(page: page)%>">
+            <%= page %>
+          </a>
+        </li>
+      <% end %>
+    <% end %>
+
+    <% unless end_page( items ) == items.total_pages %>
+      <li class="page-item disabled">
+        <span class="page-link rounded-0 <%= [bg_class, text_class, border_class].join(' ') %>">..</span>
+      </li>
+    <% end %>
+
+    <% unless items.current_page >= items.total_pages %>
+      <li class="page-item">
+        <a class="page-link rounded-0 <%= [bg_class, text_class, border_class].join(' ') %>" href="<%= path_to_next_page @tweets %>">
+          <span>&raquo;</span>
+        </a>
+      </li>
+    <% else %>
+      <li class="page-item disabled">
+        <span class="page-link rounded-0 <%= [bg_class, text_class, border_class].join(' ') %>">
+          <span>&raquo;</span>
+        </span>
+      </li>
+    <% end %>
+
+  </ul>
+</nav>

@@ -1,5 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe HashTag, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  context "Associations" do
+    it { should have_many(:hash_tag_associations) }
+    it { should have_many(:tweets) }
+  end
 end
